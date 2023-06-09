@@ -1,13 +1,18 @@
 {
   "name": "@niek-peters/supasvelte",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A simple library that puts Realtime Supabase data into Svelte stores",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
-  "keywords": [],
+  "keywords": [
+    "svelte",
+    "supabase",
+    "realtime",
+    "stores"
+  ],
   "author": "Niek Peters",
   "license": "ISC",
   "devDependencies": {
