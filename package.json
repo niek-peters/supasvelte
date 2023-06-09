@@ -17,10 +17,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrValk/supasvelte.git"
+    "url": "git+https://github.com/niek-peters/supasvelte.git"
   },
   "bugs": {
-    "url": "https://github.com/MrValk/supasvelte/issues"
+    "url": "https://github.com/niek-peters/supasvelte/issues"
   },
-  "homepage": "https://github.com/MrValk/supasvelte#readme"
+  "homepage": "https://github.com/niek-peters/supasvelte#readme"
 }
