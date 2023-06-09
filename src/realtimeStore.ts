@@ -7,10 +7,10 @@ export interface DbRow {
 }
 
 export interface SupabaseStore<
-  Entry extends DbRow,
+  Entries extends DbRow[],
   NewEntry extends DbRow,
   MutateEntry extends DbRow
-> extends Readable<Entry[]> {
+> extends Readable<Entries> {
   add: (value: NewEntry) => Promise<PostgrestError | null>;
   remove: (id: any) => Promise<PostgrestError | null>;
   mutate: (id: any, value: MutateEntry) => Promise<PostgrestError | null>;
@@ -27,9 +27,9 @@ export function getStore<
   supabase: SupabaseClient<any, "public", any>,
   tableName: string,
   indexName = "id"
-): SupabaseStore<Entry, NewEntry, MutateEntry> {
+): SupabaseStore<Entry[], NewEntry, MutateEntry> {
   const store: Writable<Entry[]> = writable([], () => {
-    return (store as unknown as SupabaseStore<Entry, NewEntry, MutateEntry>)
+    return (store as unknown as SupabaseStore<Entry[], NewEntry, MutateEntry>)
       .unsubscribe;
   });
 
@@ -91,7 +91,7 @@ export function getStore<
   };
 
   const realtimeStore = store as unknown as SupabaseStore<
-    Entry,
+    Entry[],
     NewEntry,
     MutateEntry
   >;

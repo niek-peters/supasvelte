@@ -4,7 +4,10 @@ exports.getStore = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const store_1 = require("svelte/store");
 function getStore(supabase, tableName, indexName = "id") {
-    const store = (0, store_1.writable)([]);
+    const store = (0, store_1.writable)([], () => {
+        return store
+            .unsubscribe;
+    });
     supabase
         .from(tableName)
         .select("*")
