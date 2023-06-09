@@ -16,6 +16,9 @@ A simple, typesafe library that syncs Supabase Postgres data with Svelte stores 
 {/each}
 ```
 
+## Install
+`npm i -D @niek-peters/supasvelte`
+
 ## Features
 - Keep Svelte stores up to date with realtime database updates
 - Automatically subscribe and unsubscribe from Supabase Realtime updates
