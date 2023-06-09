@@ -50,11 +50,11 @@ export function getStore<
 
         switch (payload.eventType) {
           case "INSERT":
-            store.update((data) => [...data, payload.new as Entry]);
+            store.update((data: Entry[]) => [...data, payload.new as Entry]);
             break;
           case "UPDATE":
-            store.update((data) => {
-              return data.map((item) =>
+            store.update((data: Entry[]) => {
+              return data.map((item: Entry) =>
                 item[indexName] === payload.new[indexName]
                   ? (payload.new as Entry)
                   : item
@@ -62,8 +62,10 @@ export function getStore<
             });
             break;
           case "DELETE":
-            store.update((data) =>
-              data.filter((item) => item[indexName] !== payload.old[indexName])
+            store.update((data: Entry[]) =>
+              data.filter(
+                (item: Entry) => item[indexName] !== payload.old[indexName]
+              )
             );
             break;
         }
