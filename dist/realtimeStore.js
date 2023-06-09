@@ -5,8 +5,10 @@ exports.getStore = void 0;
 const store_1 = require("svelte/store");
 function getStore(supabase, tableName, indexName = "id") {
     const store = (0, store_1.writable)([], () => {
+        const supabaseStore = store;
+        supabaseStore.channel.subscribe();
         return () => {
-            store.channel.unsubscribe();
+            supabaseStore.channel.unsubscribe();
         };
     });
     supabase
@@ -24,7 +26,6 @@ function getStore(supabase, tableName, indexName = "id") {
             .error;
     };
     const channel = getRealtimeChannel(supabase, store, tableName, indexName);
-    channel.subscribe();
     const realtimeStore = store;
     realtimeStore.add = add;
     realtimeStore.remove = remove;

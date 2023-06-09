@@ -15,9 +15,13 @@ export interface SupabaseStore<
   NewEntry extends DbRow,
   MutateEntry extends DbRow
 > extends Readable<Entries> {
-  add: (value: NewEntry) => Promise<PostgrestError | null>;
-  remove: (id: any) => Promise<PostgrestError | null>;
-  mutate: (id: any, value: MutateEntry) => Promise<PostgrestError | null>;
+  add(this: void, value: NewEntry): Promise<PostgrestError | null>;
+  remove(this: void, id: any): Promise<PostgrestError | null>;
+  mutate(
+    this: void,
+    id: any,
+    value: MutateEntry
+  ): Promise<PostgrestError | null>;
   tableName: string;
   indexName: string;
   channel: RealtimeChannel;
@@ -33,10 +37,15 @@ export function getStore<
   indexName = "id"
 ): SupabaseStore<Entry[], NewEntry, MutateEntry> {
   const store: Writable<Entry[]> = writable([], () => {
+    const supabaseStore = store as unknown as SupabaseStore<
+      Entry[],
+      NewEntry,
+      MutateEntry
+    >;
+    supabaseStore.channel.subscribe();
+
     return () => {
-      (
-        store as unknown as SupabaseStore<Entry[], NewEntry, MutateEntry>
-      ).channel.unsubscribe();
+      supabaseStore.channel.unsubscribe();
     };
   });
 
@@ -61,7 +70,6 @@ export function getStore<
     tableName,
     indexName
   );
-  channel.subscribe();
 
   const realtimeStore = store as unknown as SupabaseStore<
     Entry[],
