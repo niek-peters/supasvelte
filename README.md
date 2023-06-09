@@ -38,7 +38,11 @@ messages.mutate(entry.id, {text: 'New message'});   // mutates an existing entry
 ```
 
 ## Install
+SvelteKit:
 `npm i -D @niek-peters/supasvelte`
+
+Svelte:
+`npm i @niek-peters/supasvelte`
 
 ## Notes
 - This package is intended for client-side use
