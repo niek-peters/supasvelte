@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { writable, type Readable, type Writable } from "svelte/store";
+import {
+  writable,
+  type Readable,
+  type Writable,
+  Subscriber,
+  Unsubscriber,
+  get,
+} from "svelte/store";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 
 export interface DbRow {
@@ -10,7 +17,7 @@ export interface SupabaseStore<
   Entries extends DbRow[],
   NewEntry extends DbRow,
   MutateEntry extends DbRow
-> extends Readable<Entries> {
+> extends Omit<Readable<Entries>, "subscribe"> {
   add: (value: NewEntry) => Promise<PostgrestError | null>;
   remove: (id: any) => Promise<PostgrestError | null>;
   mutate: (id: any, value: MutateEntry) => Promise<PostgrestError | null>;

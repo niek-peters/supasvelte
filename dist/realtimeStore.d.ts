@@ -3,7 +3,7 @@ import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 export interface DbRow {
     [x: string]: any;
 }
-export interface SupabaseStore<Entries extends DbRow[], NewEntry extends DbRow, MutateEntry extends DbRow> extends Readable<Entries> {
+export interface SupabaseStore<Entries extends DbRow[], NewEntry extends DbRow, MutateEntry extends DbRow> extends Omit<Readable<Entries>, "subscribe"> {
     add: (value: NewEntry) => Promise<PostgrestError | null>;
     remove: (id: any) => Promise<PostgrestError | null>;
     mutate: (id: any, value: MutateEntry) => Promise<PostgrestError | null>;
