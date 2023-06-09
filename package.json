@@ -1,6 +1,6 @@
 {
   "name": "@niek-peters/supasvelte",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A simple library that puts Realtime Supabase data into Svelte stores",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
