@@ -5,16 +5,38 @@ exports.getStore = void 0;
 const store_1 = require("svelte/store");
 function getStore(supabase, tableName, indexName = "id") {
     const store = (0, store_1.writable)([], () => {
-        return store
-            .unsubscribe;
+        return () => {
+            store.channel.unsubscribe();
+        };
     });
     supabase
         .from(tableName)
         .select("*")
         .then((data) => store.set(data.data || []));
-    const channel = supabase
-        .channel("table-db-changes")
-        .on("postgres_changes", {
+    const add = async (value) => {
+        return (await supabase.from(tableName).insert(value)).error;
+    };
+    const remove = async (id) => {
+        return (await supabase.from(tableName).delete().eq(indexName, id)).error;
+    };
+    const mutate = async (id, value) => {
+        return (await supabase.from(tableName).update(value).eq(indexName, id))
+            .error;
+    };
+    const channel = getRealtimeChannel(supabase, store, tableName, indexName);
+    channel.subscribe();
+    const realtimeStore = store;
+    realtimeStore.add = add;
+    realtimeStore.remove = remove;
+    realtimeStore.mutate = mutate;
+    realtimeStore.tableName = tableName;
+    realtimeStore.indexName = indexName;
+    realtimeStore.channel = channel;
+    return realtimeStore;
+}
+exports.getStore = getStore;
+function getRealtimeChannel(supabase, store, tableName, indexName = "id") {
+    return supabase.channel("table-db-changes").on("postgres_changes", {
         event: "*",
         schema: "public",
         table: tableName,
@@ -36,28 +58,5 @@ function getStore(supabase, tableName, indexName = "id") {
                 store.update((data) => data.filter((item) => item[indexName] !== payload.old[indexName]));
                 break;
         }
-    })
-        .subscribe();
-    const add = async (value) => {
-        return (await supabase.from(tableName).insert(value)).error;
-    };
-    const remove = async (id) => {
-        return (await supabase.from(tableName).delete().eq(indexName, id)).error;
-    };
-    const mutate = async (id, value) => {
-        return (await supabase.from(tableName).update(value).eq(indexName, id))
-            .error;
-    };
-    const unsubscribe = () => {
-        channel.unsubscribe();
-    };
-    const realtimeStore = store;
-    realtimeStore.add = add;
-    realtimeStore.remove = remove;
-    realtimeStore.mutate = mutate;
-    realtimeStore.unsubscribe = unsubscribe;
-    realtimeStore.tableName = tableName;
-    realtimeStore.indexName = indexName;
-    return realtimeStore;
+    });
 }
-exports.getStore = getStore;
