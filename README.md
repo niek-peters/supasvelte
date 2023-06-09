@@ -16,9 +16,6 @@ A simple, typesafe library that syncs Supabase Postgres data with Svelte stores 
 {/each}
 ```
 
-## Install
-`npm i -D @niek-peters/supasvelte`
-
 ## Features
 - Keep Svelte stores up to date with realtime database updates
 - Automatically subscribe and unsubscribe from Supabase Realtime updates
@@ -39,6 +36,9 @@ messages.add({text: entry.text});                   // adds an entry to the tabl
 messages.remove(entry.id);                          // removes an entry from the table
 messages.mutate(entry.id, {text: 'New message'});   // mutates an existing entry in the table
 ```
+
+## Install
+`npm i -D @niek-peters/supasvelte`
 
 ## Notes
 - This package is intended for client-side use
