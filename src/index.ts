@@ -1,5 +1,1 @@
-export {
-  getTableStore,
-  TableRow as DbRow,
-  SupabaseStore,
-} from "./realtimeStore";
+export { getTableStore, TableRow, TableStore } from "./tableStore";
