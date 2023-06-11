@@ -6,14 +6,14 @@ import type {
   SupabaseClient,
 } from "@supabase/supabase-js";
 
-export interface DbRow {
+export interface TableRow {
   [x: string]: any;
 }
 
 export interface SupabaseStore<
-  Entries extends DbRow[],
-  NewEntry extends DbRow,
-  MutateEntry extends DbRow
+  Entries extends TableRow[],
+  NewEntry extends TableRow,
+  MutateEntry extends TableRow
 > extends Readable<Entries> {
   add(this: void, value: NewEntry): Promise<PostgrestError | null>;
   remove(this: void, id: any): Promise<PostgrestError | null>;
@@ -27,10 +27,25 @@ export interface SupabaseStore<
   channel: RealtimeChannel;
 }
 
-export function getStore<
-  Entry extends DbRow,
-  NewEntry extends DbRow = Omit<Entry, "id">,
-  MutateEntry extends DbRow = NewEntry
+/**
+ * Get a store that contains realtime data from a table in your Supabase PostgreSQL database.
+ *
+ * It is possible to provide 3 generic types to this function:
+ * - `Entry`: The type of the data that is stored in the table, including all columns from the table as fields
+ * - `NewEntry`: The type of the data that can be added to the table (for example, without the `id` and nullable fields)
+ * - `MutateEntry`: The type of the data that can be mutated in the table (for example, without the `id` and other fields that shouldn't be changed)
+ *
+ * The last two generics are optional, and will default to the `Entry` type, but without the `id` field.
+ *
+ * @param supabase An instance of the Supabase Client
+ * @param tableName The name of the table you want to get data from
+ * @param indexName The name of the table's primary key or index (default: `id`. If you change this, you should probably provide your own NewEntry and MutateEntry types)
+ * @returns A store that contains realtime data from the table
+ */
+export function getTableStore<
+  Entry extends TableRow,
+  NewEntry extends TableRow = Omit<Entry, "id">,
+  MutateEntry extends TableRow = NewEntry
 >(
   supabase: SupabaseClient<any, "public", any>,
   tableName: string,
@@ -87,7 +102,7 @@ export function getStore<
   return realtimeStore;
 }
 
-function getRealtimeChannel<Entry extends DbRow>(
+function getRealtimeChannel<Entry extends TableRow>(
   supabase: SupabaseClient<any, "public", any>,
   store: Writable<Entry[]>,
   tableName: string,

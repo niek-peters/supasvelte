@@ -1,1 +1,5 @@
-export { getStore, DbRow, SupabaseStore } from "./realtimeStore";
+export {
+  getTableStore,
+  TableRow as DbRow,
+  SupabaseStore,
+} from "./realtimeStore";
