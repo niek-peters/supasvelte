@@ -8,7 +8,7 @@ A simple, typesafe library that syncs Supabase Postgres data with Svelte stores 
   // ...initialize Supabase client
   
   // get realtime data from the messages table
-  const messages = getStore<Message>(supabaseClient, 'messages');
+  const messages = getTableStore<Message>(supabaseClient, 'messages');
 </script>
 
 {#each $messages as message}
@@ -21,11 +21,11 @@ A simple, typesafe library that syncs Supabase Postgres data with Svelte stores 
 - Automatically subscribe and unsubscribe from Supabase Realtime updates
 - Provide your own or Supabase generated types for a completely typesafe experience:
 ```ts
-getStore<Message, NewMessage, MutateMessage>(supabaseClient, 'messages')
+getTableStore<Message, NewMessage, MutateMessage>(supabaseClient, 'messages')
 ```
 - Use methods on the store to easily modify the database tables:
 ```ts
-const messages = getStore(supabaseClient, 'messages');
+const messages = getTableStore(supabaseClient, 'messages');
 
 const entry = {
   id: 1,
