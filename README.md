@@ -62,7 +62,7 @@ const messages = getTableStore(supabaseClient, "messages", {mutateInterval: 1000
 - Run code after the mutation broadcasting channel is ready to receive updates using the `onReady` callback function:
 
 ```ts
-const messages = getTableStore(supabaseClient, "messages", {indexName: "id"}, () => {
+const messages = getTableStore(supabaseClient, "messages", {indexName: "id", mutateInterval: 2000}, () => {
   console.log("Ready to broadcast!");
 });
 ```
