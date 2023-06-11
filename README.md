@@ -36,9 +36,35 @@ const entry = {
   text: "Hey there!",
 };
 
-messages.add({ text: entry.text }); // adds an entry to the table
-messages.remove(entry.id); // removes an entry from the table
-messages.mutate(entry.id, { text: "New message" }); // mutates an existing entry in the table
+// adds an entry to the table
+messages.add({ text: entry.text }); 
+
+// removes an entry from the table
+messages.remove(entry.id); 
+
+// mutates an existing entry in the table
+messages.mutate(entry.id, { text: "New message" }); 
+```
+
+- Provide your own table index or primary key by setting the `indexName` option:
+
+```ts
+const messages = getTableStore(supabaseClient, "messages", {indexName: "uuid"});
+```
+
+- Decrease the amount of database requests by setting the `mutateInterval` option. This broadcasts changes to all connected clients without updating the database in case mutate requests are sent faster than the interval. After the interval is over or a client disconnects, the database will be updated. Useful for decreasing the load on the database for applications that make very frequent mutations to persistent data.
+
+```ts
+// Set a 10 second table mutation interval
+const messages = getTableStore(supabaseClient, "messages", {mutateInterval: 10000});
+```
+
+- Run code after the mutation broadcasting channel is ready to receive updates using the `onReady` callback function:
+
+```ts
+const messages = getTableStore(supabaseClient, "messages", {indexName: "id"}, () => {
+  console.log("Ready to broadcast!");
+});
 ```
 
 ## Install
